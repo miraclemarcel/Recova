@@ -1,0 +1,39 @@
+appId: app.recova.desktop
+productName: Recova
+copyright: Copyright © 2026 Recova
+directories:
+  output: release/${version}
+  buildResources: build
+files:
+  - out/**/*
+  - package.json
+  - '!**/*.map'
+asarUnpack:
+  - node_modules/ffmpeg-static/**
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.png
+  artifactName: ${productName}-Setup-${version}.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Recova
+mac:
+  target: [dmg]
+  category: public.app-category.video
+  icon: build/icon.png
+  extendInfo:
+    NSCameraUsageDescription: Recova uses the camera only when you enable Include Facecam.
+    NSMicrophoneUsageDescription: Recova uses the microphone only when you enable microphone audio.
+linux:
+  target: [AppImage]
+  category: AudioVideo
+  icon: build/icon.png
+publish:
+  provider: github
+  releaseType: draft
