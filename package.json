@@ -40,7 +40,8 @@
     "dist:linux": "npm run build && electron-builder --linux",
     "postinstall": "electron-builder install-app-deps",
     "test:e2e": "electron-vite build && electron scripts/e2e-main.cjs",
-    "release": "npm run build && electron-builder --publish always"
+    "release": "npm run build && electron-builder --publish always",
+    "screenshots": "electron-vite build && electron scripts/screenshots.cjs assets && electron scripts/screenshots.cjs shots"
   },
   "dependencies": {
     "ffmpeg-static": "^5.3.0"
