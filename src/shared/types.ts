@@ -85,7 +85,7 @@ export interface CaptureSource {
 }
 
 export interface PlatformInfo {
-  platform: NodeJS.Platform | string
+  platform: string
   systemAudioSupported: boolean
   systemAudioNote: string
   toolbarExcludedFromCapture: boolean
