@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Camera, Download, FileWarning, Image, LayoutTemplate, Pause, Play, RotateCcw, Shapes, Type } from 'lucide-react'
 import { mediaUrl } from '@shared/constants'
 import { Button, EmptyState, IconButton, Segmented } from '@renderer/components/ui'
@@ -56,7 +56,6 @@ export function StudioView({ recordingId }: { recordingId: string }) {
   const [playing, setPlaying] = useState(false)
   const [time, setTime] = useState(0)
   const [duration, setDuration] = useState(rec?.durationSec ?? 0)
-  const cameraRef = useRef<HTMLVideoElement | null>(null)
 
   const hasCamera = !!rec?.hasCamera && !rec.cameraMissing
   const update = useCallback((fn: (c: Composition) => Composition) => setComp((c) => (c ? fn(c) : c)), [])
@@ -95,18 +94,15 @@ export function StudioView({ recordingId }: { recordingId: string }) {
     }
   }, [screenEl, cameraEl, rec?.camera?.offsetMs])
 
-  // Release media elements when leaving the studio.
-  useEffect(
-    () => () => {
-      for (const el of [screenEl, cameraRef.current]) {
-        if (!el) continue
-        el.pause()
-        el.removeAttribute('src')
-        el.load()
-      }
-    },
-    [screenEl]
-  )
+  // Stop playback when leaving the studio; React then removes the elements, freeing the decoders.
+  useEffect(() => {
+    const screen = screenEl
+    const camera = cameraEl
+    return () => {
+      screen?.pause()
+      camera?.pause()
+    }
+  }, [screenEl, cameraEl])
 
   if (!rec || !comp) {
     return (
@@ -240,10 +236,7 @@ export function StudioView({ recordingId }: { recordingId: string }) {
       <video ref={setScreenEl} src={mediaUrl.screen(rec.id)} crossOrigin="anonymous" preload="auto" playsInline className="hidden" />
       {hasCamera && (
         <video
-          ref={(el) => {
-            cameraRef.current = el
-            setCameraEl(el)
-          }}
+          ref={setCameraEl}
           src={mediaUrl.camera(rec.id)}
           crossOrigin="anonymous"
           preload="auto"

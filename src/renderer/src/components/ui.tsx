@@ -223,7 +223,8 @@ export function Modal({ open, onClose, title, children, footer, width = 'max-w-m
     if (!open) return
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
-    ref.current?.querySelector<HTMLElement>('input, button')?.focus()
+    // Focus the first field, falling back to the first action button.
+    ;(ref.current?.querySelector<HTMLElement>('input:not([type=range])') ?? ref.current?.querySelector<HTMLElement>('[role=dialog] > :last-child button'))?.focus()
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
   if (!open) return null
@@ -283,7 +284,7 @@ export function EmptyState({ icon: Icon, title, description, action }: { icon: L
 export function Logo({ size = 28 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="9" fill="#16161d" />
+      <rect x="0.5" y="0.5" width="31" height="31" rx="8.5" fill="#16161d" stroke="var(--line-strong)" />
       <rect x="6.5" y="9" width="19" height="14" rx="3.5" fill="none" stroke="#fff" strokeWidth="2" />
       <circle cx="16" cy="16" r="3.6" fill="#ff5a5f" />
     </svg>

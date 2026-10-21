@@ -27,6 +27,10 @@ Free, open source and local-first. No account, no cloud, no watermark.
   <a href="https://github.com/miraclemarcel/Recova/releases">all releases</a>
 </sub>
 
+<br /><br />
+
+<img src="docs/screenshots/studio-facecam.png" alt="Recova Video Studio: a screen recording on a lavender background with a title and a circular facecam" width="900" />
+
 </div>
 
 ---
@@ -36,6 +40,23 @@ Free, open source and local-first. No account, no cloud, no watermark.
 Most screen recorders give you a plain rectangle of pixels. Recova records your screen and then helps you **present** it: a designed background, a floating video card with soft shadows and rounded corners, a facecam bubble you can drag anywhere, and an optional title. You get a crisp MP4 you can post right away.
 
 Everything runs on your computer. Your recordings are never uploaded.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/dashboard.png" alt="Recordings library with thumbnails" /><br /><sub><b>Library:</b> all your recordings, stored locally</sub></td>
+    <td width="50%"><img src="docs/screenshots/setup.png" alt="New recording setup screen" /><br /><sub><b>New recording:</b> pick a screen or window, audio, facecam and quality</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/studio-browser.png" alt="Video Studio with a browser-window frame on a gradient" /><br /><sub><b>Video Studio:</b> browser-window frame on a modern gradient</sub></td>
+    <td width="50%"><img src="docs/screenshots/studio-portrait.png" alt="Video Studio in 9:16 portrait with a facecam panel" /><br /><sub><b>Any aspect ratio:</b> 9:16 portrait with a separate facecam panel</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/export.png" alt="Export dialog" /><br /><sub><b>Export:</b> MP4 up to 4K, rendered in the background</sub></td>
+    <td width="50%"><img src="docs/screenshots/dashboard-dark.png" alt="Recova in dark mode" /><br /><sub><b>Dark mode:</b> light, dark or follow the system</sub></td>
+  </tr>
+</table>
 
 ## Features
 
@@ -105,6 +126,7 @@ npm run dev        # start with hot reload
 | `npm run preview` | Run the production build |
 | `npm run test:pipeline` | End-to-end FFmpeg composition → MP4 test |
 | `npm run test:e2e` | Drives the real app UI: record → Studio → export |
+| `npm run screenshots` | Regenerates `docs/screenshots/` from the real app using demo content |
 | `npm run dist:win` | Build the Windows installer into `release/<version>/` |
 | `npm run dist:mac` / `npm run dist:linux` | Build a DMG / AppImage (run on that OS) |
 
