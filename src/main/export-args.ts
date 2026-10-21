@@ -39,7 +39,7 @@ export function buildExportArgs(req: Omit<ExportRequest, 'layers' | 'screen' | '
       : `scale=${sw}:${sh}:flags=lanczos`
   const filters = [
     `[0:v]setpts=PTS-STARTPTS,fps=${fps},${scaleScreen},setsar=1,format=rgba[sv]`,
-    `[2:v]format=gray,scale=${sw}:${sh}[sm]`,
+    `[2:v]format=rgba,alphaextract,scale=${sw}:${sh}[sm]`,
     `[sv][sm]alphamerge[sa]`,
     `[1:v]format=rgba[bg]`,
     `[bg][sa]overlay=${int(s.x)}:${int(s.y)}:eof_action=repeat[c1]`,
@@ -56,7 +56,7 @@ export function buildExportArgs(req: Omit<ExportRequest, 'layers' | 'screen' | '
     const timing = offset >= 0 ? `setpts=PTS-STARTPTS+${offset.toFixed(3)}/TB` : `trim=start=${(-offset).toFixed(3)},setpts=PTS-STARTPTS`
     filters.push(
       `[5:v]${timing},fps=${fps},scale=${cw}:${ch}:force_original_aspect_ratio=increase,crop=${cw}:${ch}${req.camera.mirror ? ',hflip' : ''},setsar=1,format=rgba[cv]`,
-      `[6:v]format=gray,scale=${cw}:${ch}[cm]`,
+      `[6:v]format=rgba,alphaextract,scale=${cw}:${ch}[cm]`,
       `[cv][cm]alphamerge[ca]`,
       `[c2][ca]overlay=${int(c.x)}:${int(c.y)}:eof_action=pass[c3]`
     )

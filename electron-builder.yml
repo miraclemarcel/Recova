@@ -15,7 +15,9 @@ win:
     - target: nsis
       arch: [x64]
   icon: build/icon.png
-  artifactName: ${productName}-Setup-${version}.${ext}
+  # Unversioned name gives a stable direct-download link:
+  # https://github.com/miraclemarcel/Recova/releases/latest/download/Recova-Setup.exe
+  artifactName: ${productName}-Setup.${ext}
 nsis:
   oneClick: false
   perMachine: false
@@ -25,6 +27,7 @@ nsis:
   shortcutName: Recova
 mac:
   target: [dmg]
+  artifactName: ${productName}-${arch}.${ext}
   category: public.app-category.video
   icon: build/icon.png
   extendInfo:
@@ -32,8 +35,11 @@ mac:
     NSMicrophoneUsageDescription: Recova uses the microphone only when you enable microphone audio.
 linux:
   target: [AppImage]
+  artifactName: ${productName}-${arch}.${ext}
   category: AudioVideo
   icon: build/icon.png
 publish:
   provider: github
-  releaseType: draft
+  owner: miraclemarcel
+  repo: Recova
+  releaseType: release

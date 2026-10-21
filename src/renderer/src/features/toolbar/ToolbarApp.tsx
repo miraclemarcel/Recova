@@ -34,6 +34,7 @@ export function ToolbarApp() {
         } else setCountdown(n)
       }, 1000)
     })
+    window.recova.toolbar.ready()
     return () => {
       offState()
       offCountdown()

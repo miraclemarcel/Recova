@@ -34,6 +34,7 @@ const api: RecovaApi = {
   },
   toolbar: {
     command: (cmd) => ipcRenderer.send('toolbar:command', cmd),
+    ready: () => ipcRenderer.send('toolbar:ready'),
     onState: (cb) => subscribe('toolbar:state', cb),
     onCountdown: (cb) => subscribe('toolbar:countdown', cb)
   },

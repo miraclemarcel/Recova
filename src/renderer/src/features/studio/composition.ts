@@ -339,15 +339,22 @@ export function drawBaseLayer(ctx: Ctx, c: Composition, L: Layout, assets: Backg
   drawBackground(ctx, c, L, assets, templatePainter)
   const bw = c.screen.borderWidth * L.u
   const outer = expand(L.window, bw)
-  withShadow(ctx, c.screen.shadow, L.u, () => {
-    roundRectPath(ctx, outer, L.windowRadius + bw)
-    ctx.fillStyle = c.screen.borderWidth > 0 ? c.screen.borderColor : '#000'
-    ctx.fill()
-  })
-  // Behind the video (visible only in letterboxed edge pixels).
-  roundRectPath(ctx, L.screen, L.screenRadii)
-  ctx.fillStyle = '#000'
-  ctx.fill()
+  if (c.screen.shadow !== 'none' || bw > 0) {
+    withShadow(ctx, c.screen.shadow, L.u, () => {
+      roundRectPath(ctx, outer, L.windowRadius + bw)
+      ctx.fillStyle = bw > 0 ? c.screen.borderColor : '#000'
+      ctx.fill()
+    })
+    if (bw === 0) {
+      // Keep only the shadow: repaint the background inside the shape, so the video's
+      // anti-aliased rounded edges blend with the background rather than a dark fill.
+      ctx.save()
+      roundRectPath(ctx, L.window, L.windowRadius)
+      ctx.clip()
+      drawBackground(ctx, c, L, assets, templatePainter)
+      ctx.restore()
+    }
+  }
   if (L.bar) drawChrome(ctx, c, L, L.bar)
   if (L.panel && c.camera.panel) {
     roundRectPath(ctx, L.panel, 24 * L.u)
@@ -477,9 +484,9 @@ function drawChrome(ctx: Ctx, c: Composition, L: Layout, bar: Rect): void {
   }
 }
 
+/** Masks carry the shape in their alpha channel (FFmpeg reads it with alphaextract, avoiding colour-range issues). */
 export function drawMask(ctx: Ctx, w: number, h: number, radii: number | Radii): void {
-  ctx.fillStyle = '#000'
-  ctx.fillRect(0, 0, w, h)
+  ctx.clearRect(0, 0, w, h)
   roundRectPath(ctx, { x: 0, y: 0, w, h }, radii)
   ctx.fillStyle = '#fff'
   ctx.fill()

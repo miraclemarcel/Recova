@@ -3,6 +3,8 @@ import { join } from 'node:path'
 
 let mainWindow: BrowserWindow | null = null
 let toolbarWindow: BrowserWindow | null = null
+let toolbarReady = false
+let pendingCountdown: number | null = null
 
 const TOOLBAR_SIZE = { width: 420, height: 64 }
 const COUNTDOWN_SIZE = { width: 220, height: 220 }
@@ -97,18 +99,29 @@ export function showToolbar(countdown: number): void {
     toolbarWindow.setContentProtection(true)
     toolbarWindow.setVisibleOnAllWorkspaces(true)
     hardenNavigation(toolbarWindow)
-    toolbarWindow.on('closed', () => (toolbarWindow = null))
+    toolbarWindow.on('closed', () => {
+      toolbarWindow = null
+      toolbarReady = false
+    })
     loadRenderer(toolbarWindow, 'toolbar')
   }
   placeToolbar(countdown > 0)
-  const win = toolbarWindow
-  const start = () => {
-    win.showInactive()
-    win.webContents.send('toolbar:countdown', countdown)
-  }
-  if (win.webContents.isLoading()) win.webContents.once('did-finish-load', start)
-  else start()
+  toolbarWindow.showInactive()
+  pendingCountdown = countdown
+  flushCountdown()
   mainWindow?.minimize()
+}
+
+function flushCountdown(): void {
+  if (!toolbarReady || pendingCountdown === null || !toolbarWindow) return
+  toolbarWindow.webContents.send('toolbar:countdown', pendingCountdown)
+  pendingCountdown = null
+}
+
+/** Called once the toolbar UI has subscribed, so the countdown message is never lost. */
+export function markToolbarReady(): void {
+  toolbarReady = true
+  flushCountdown()
 }
 
 export function compactToolbar(): void {
