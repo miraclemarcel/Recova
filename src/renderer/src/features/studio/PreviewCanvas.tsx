@@ -17,6 +17,7 @@ import { getTemplate } from './templates'
 interface Props {
   comp: Composition
   rec: RecordingMeta
+  hasCamera: boolean
   out: Size
   assets: BackgroundAssets
   screenVideo: HTMLVideoElement | null
@@ -35,14 +36,13 @@ function makeLayerCanvas(w: number, h: number): HTMLCanvasElement {
  * Live preview. Static layers are rendered once per change into cached canvases using the same
  * drawing functions as the exporter; each frame only blits the caches and draws the video frames.
  */
-export function PreviewCanvas({ comp, rec, out, assets, screenVideo, cameraVideo, onChange }: Props) {
+export function PreviewCanvas({ comp, rec, hasCamera, out, assets, screenVideo, cameraVideo, onChange }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [box, setBox] = useState({ w: 0, h: 0 })
   const [hover, setHover] = useState<'camera' | 'screen' | null>(null)
   const drag = useRef<{ kind: 'camera' | 'screen'; startX: number; startY: number; orig: Composition } | null>(null)
 
-  const hasCamera = rec.hasCamera && rec.camera !== null
   const source = useMemo(() => ({ w: rec.width, h: rec.height }), [rec.width, rec.height])
   const layout = useMemo(() => computeLayout(comp, source, hasCamera, out), [comp, source, hasCamera, out])
 

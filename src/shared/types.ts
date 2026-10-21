@@ -182,6 +182,7 @@ export interface RecovaApi {
   }
   toolbar: {
     command(cmd: ToolbarCommand): void
+    ready(): void
     onState(cb: (state: RecorderState) => void): () => void
     onCountdown(cb: (seconds: number) => void): () => void
   }

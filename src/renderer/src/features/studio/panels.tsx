@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlignCenter, AlignLeft, AlignRight, Check, Circle, Crosshair, ImagePlus, RectangleHorizontal, Square } from 'lucide-react'
 import type { CameraShape } from '@shared/types'
 import { Button, Field, Notice, SectionTitle, Segmented, Slider, TextInput, Toggle } from '@renderer/components/ui'
@@ -260,7 +260,8 @@ export function LayoutPanel({ comp, update, hasCamera }: { comp: Composition; up
 
 export function BackgroundPanel({ comp, update, onUpload, uploading }: { comp: Composition; update: Update; onUpload: () => void; uploading: boolean }) {
   const bg = comp.background
-  const kind = bg.kind
+  const [kind, setKind] = useState<Composition['background']['kind']>(bg.kind)
+  useEffect(() => setKind(bg.kind), [bg.kind])
   const t = getTemplate(comp.templateId)
   return (
     <div className="space-y-5">
@@ -268,14 +269,16 @@ export function BackgroundPanel({ comp, update, onUpload, uploading }: { comp: C
         className="w-full"
         size="sm"
         value={kind}
-        onChange={(k) =>
+        onChange={(k) => {
+          setKind(k)
+          // The image tab only changes the background once an image has been chosen.
+          if (k === 'image') return
           update((c) => {
             if (k === 'template') return applyTemplate(c, getTemplate(c.templateId))
-            if (k === 'solid') return { ...c, background: { kind: 'solid', color: '#f4f4f5' } }
-            if (k === 'gradient') return { ...c, background: { kind: 'gradient', ...GRADIENT_PRESETS[0] } }
-            return c.background.kind === 'image' ? c : c
+            if (k === 'solid') return c.background.kind === 'solid' ? c : { ...c, background: { kind: 'solid', color: '#f4f4f5' } }
+            return c.background.kind === 'gradient' ? c : { ...c, background: { kind: 'gradient', ...GRADIENT_PRESETS[0] } }
           })
-        }
+        }}
         options={[
           { value: 'template', label: 'Template' },
           { value: 'solid', label: 'Solid' },

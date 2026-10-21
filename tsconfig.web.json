@@ -13,8 +13,7 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": { "@renderer/*": ["src/renderer/src/*"], "@shared/*": ["src/shared/*"] }
+    "paths": { "@renderer/*": ["./src/renderer/src/*"], "@shared/*": ["./src/shared/*"] }
   },
   "include": ["src/renderer/src/**/*", "src/shared/**/*", "src/preload/api.d.ts"]
 }

@@ -10,7 +10,7 @@ import { beginRecording, discardRecording, finishRecording, flushActiveSessions,
 import { cancelAllExports, cancelExport, isImage, startExport } from './exporter'
 import { backgroundsDir, handleMediaProtocol, registerMediaScheme } from './media-protocol'
 import { installDisplayMediaHandler, installPermissionHandlers, listSources, prepareCapture, systemAudioSupport } from './capture'
-import { compactToolbar, createMainWindow, getMainWindow, getToolbarWindow, hideToolbar, showToolbar } from './windows'
+import { compactToolbar, createMainWindow, getMainWindow, getToolbarWindow, hideToolbar, markToolbarReady, showToolbar } from './windows'
 import { ffmpegAvailable } from './ffmpeg'
 
 registerMediaScheme()
@@ -96,6 +96,9 @@ function registerIpc(): void {
   ipcMain.on('recording:state', (event, state: RecorderState) => {
     if (!trusted(event)) return
     getToolbarWindow()?.webContents.send('toolbar:state', state)
+  })
+  ipcMain.on('toolbar:ready', (event) => {
+    if (event.sender.id === getToolbarWindow()?.webContents.id) markToolbarReady()
   })
   ipcMain.on('toolbar:command', (event, cmd: ToolbarCommand) => {
     if (!trusted(event)) return

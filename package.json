@@ -3,8 +3,29 @@
   "productName": "Recova",
   "version": "1.0.0",
   "description": "Record your screen, voice and face, then turn recordings into beautiful presentation-ready videos.",
-  "author": "Miracle Marcel: 247Techboss",
+  "author": {
+    "name": "Miracle Marcel",
+    "url": "https://github.com/miraclemarcel"
+  },
   "license": "MIT",
+  "homepage": "https://github.com/miraclemarcel/Recova#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miraclemarcel/Recova.git"
+  },
+  "bugs": {
+    "url": "https://github.com/miraclemarcel/Recova/issues"
+  },
+  "keywords": [
+    "screen-recorder",
+    "electron",
+    "react",
+    "typescript",
+    "video",
+    "facecam",
+    "ffmpeg",
+    "open-source"
+  ],
   "private": true,
   "main": "./out/main/index.js",
   "scripts": {
@@ -12,12 +33,14 @@
     "build": "npm run typecheck && electron-vite build",
     "preview": "electron-vite preview",
     "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json --noEmit",
-    "test:pipeline": "electron-vite build && node scripts/test-export-pipeline.mjs",
+    "test:pipeline": "node scripts/test-export-pipeline.mjs",
     "dist": "npm run build && electron-builder --win",
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
     "dist:linux": "npm run build && electron-builder --linux",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "test:e2e": "electron-vite build && electron scripts/e2e-main.cjs",
+    "release": "npm run build && electron-builder --publish always"
   },
   "dependencies": {
     "ffmpeg-static": "^5.3.0"
@@ -28,7 +51,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.2.0",
-    "electron": "^44.9.3",
+    "electron": "^44.9.1",
     "electron-builder": "^26.15.3",
     "electron-vite": "^5.0.0",
     "lucide-react": "1.60",
