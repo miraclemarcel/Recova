@@ -5,7 +5,7 @@ import ffmpegStatic from 'ffmpeg-static'
 /** Resolves the bundled FFmpeg binary; inside a packaged app it lives in app.asar.unpacked. */
 export function ffmpegPath(): string {
   const p = (ffmpegStatic as unknown as string | null) ?? ''
-  return p.replace(`app.asar${process.platform === 'win32' ? '\' : '/'}`, `app.asar.unpacked${process.platform === 'win32' ? '\' : '/'}`)
+  return p.replace(/app\.asar([\\/])/, 'app.asar.unpacked$1')
 }
 
 export function ffmpegAvailable(): boolean {
