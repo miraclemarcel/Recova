@@ -53,8 +53,7 @@ export function MicrophonePanel({ devices, deviceId, onDevice, gain, onGain }: {
       meter.dispose()
       meterRef.current = null
     }
-    // Gain changes are applied below without rebuilding the meter.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Gain changes are applied by the effect below without rebuilding the meter.
   }, [stream])
   useEffect(() => meterRef.current?.setGain(gain), [gain])
 

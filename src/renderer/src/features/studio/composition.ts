@@ -100,6 +100,8 @@ export interface Layout {
   panel: Rect | null
   text: TextItem[]
   brand: { rect: Rect; item: TextItem } | null
+  /** Free space around the screen window inside its area, used to map drags to offsets. */
+  free: { x: number; y: number }
 }
 
 export const even = (n: number) => Math.max(2, Math.round(n / 2) * 2)
@@ -225,7 +227,7 @@ export function computeLayout(c: Composition, source: Size, hasCamera: boolean, 
     brand = { rect, item: { text: c.text.brand.text, x: rect.x + w / 2, y: rect.y + h / 2 - size * 0.62, size, weight: 600, color: c.text.brand.color, align: 'center' } }
   }
 
-  return { W, H, u, screen, screenRadii, window: win, windowRadius: radius, bar, camera, cameraRadius, panel, text, brand }
+  return { W, H, u, screen, screenRadii, window: win, windowRadius: radius, bar, camera, cameraRadius, panel, text, brand, free: { x: area.w - vw, y: area.h - vh - barH } }
 }
 
 /** Default facecam centre (as canvas fractions) for a corner, kept in the padding margin where possible. */
